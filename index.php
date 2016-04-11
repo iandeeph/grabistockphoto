@@ -90,15 +90,15 @@ class ImageFactory{
 if(isset($_POST['submit'])){
 	$category 		= $_POST['category'];
 	$totalImages 	= intval($_POST['totalImages']);
-	$totalPage		= floor($totalImages/200); //200 adalah item terbanyak yang dapat ditampilkan dalam 1 halaman
+	$perPages 		= ($totalImages >= 200)?200:$totalImages;
+	$totalPage		= ($totalImages < 200)?1:floor($totalImages/200); //200 adalah item terbanyak yang dapat ditampilkan dalam 1 halaman
 
 	$data = array();
 	$data[0] = ["Nama File"];
 	$x = 1;
 
 	for ($page=1; $page <=$totalPage ; $page++) {
-		$url = "http://www.istockphoto.com/photos/".$category."?facets=%7B%22text%22:%5B%22".$category."%22%5D,%22pageNumber%22:".$page.",%22perPage%22:".$totalImages.",%22abstractType%22:%5B%22photos%22,%22illustrations%22%5D,%22order%22:%22bestMatch%22,%22f%22:true%7D";
-
+		$url = "http://www.istockphoto.com/photos/".$category."?facets=%7B%22text%22:%5B%22".$category."%22%5D,%22pageNumber%22:".$page.",%22perPage%22:".$perPages.",%22abstractType%22:%5B%22photos%22,%22illustrations%22%5D,%22order%22:%22bestMatch%22,%22f%22:true%7D";
 		$date = date("j-M-Y h:i:s");
 	    echo '['.$date.'] Parsing : '.$url."</br>";
 	    $output = curl_get_contents($url);
